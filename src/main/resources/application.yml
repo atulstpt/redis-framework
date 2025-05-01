@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: redisinterface
+  data:
+    redis:
+      host: redis-19039.c251.east-us-mz.azure.redns.redis-cloud.com
+      port: 19039
+      password: yhZ10YV96XmwQgPFELwi6iUHCfRxkWy1
