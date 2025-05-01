@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class RedisServiceImpl<T> implements RedisService<T> {
+public class RedisCacheManager<T> implements RedisService<T> {
 
     private static final String KEY = "Product";
     private final RedisTemplate<String, T> redisTemplate;
@@ -34,7 +34,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
         this.defaultTtl = Duration.ofHours(ttlHours);
     }
 
-    public RedisServiceImpl(RedisTemplate<String, T> redisTemplate) {
+    public RedisCacheManager(RedisTemplate<String, T> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
@@ -142,17 +142,21 @@ public class RedisServiceImpl<T> implements RedisService<T> {
         }
     }
 
-    private void validateKeyValue(String key, T value) {
+    private void validateKey(String key) {
         if (key == null || key.trim().isEmpty()) {
             throw new IllegalArgumentException("Key cannot be null or empty");
         }
+    }
+
+    private void validateKeyValue(String key, T value) {
+        validateKey(key);
         if (value == null) {
             throw new IllegalArgumentException("Value cannot be null");
         }
     }
 
-    private void handleRedisException(String message, String key, Exception e) throws RedisOperationException {
-        String errorMessage = key != null ? message + " - key: " + key : message;
+    private void handleRedisException(String message, String key, Exception e) {
+        String errorMessage = String.format("%s - key: %s", message, key);
         log.error(errorMessage, e);
         throw RedisOperationException.builder()
                 .withErrorCode(RedisOperationException.RedisErrorCode.DATA_ACCESS_ERROR)
@@ -160,6 +164,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
                 .withCause(e)
                 .build();
     }
+
 
 
 }
