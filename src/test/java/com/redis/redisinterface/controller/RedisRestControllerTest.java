@@ -35,7 +35,7 @@ public class RedisRestControllerTest {
 
     @Test
     public void testCreate_SuccessfulSave() throws Exception, RedisOperationException {
-        UserSession userSession = new UserSession("session1", "portal1", "2023-01-01", "active");
+        UserSession userSession = new UserSession("1", "session1", "portal1", "2023-01-01", "active");
         RedisResponse mockResponse = new RedisResponse(true, "User session successfully saved");
 
         Mockito.doNothing().when(redisService).save(eq("1"), any(UserSession.class));
@@ -61,7 +61,7 @@ public class RedisRestControllerTest {
 
     @Test
     public void testCreate_FailedToVerifySavedData() throws Exception, RedisOperationException {
-        UserSession userSession = new UserSession("session1", "portal1", "2023-01-01", "active");
+        UserSession userSession = new UserSession("1", "session1", "portal1", "2023-01-01", "active");
         RedisResponse mockResponse = new RedisResponse(false, "Failed to verify saved data");
 
         Mockito.doNothing().when(redisService).save(eq("1"), any(UserSession.class));
@@ -76,7 +76,7 @@ public class RedisRestControllerTest {
 
     @Test
     public void testCreate_InternalServerError() throws Exception, RedisOperationException {
-        UserSession userSession = new UserSession("session1", "portal1", "2023-01-01", "active");
+        UserSession userSession = new UserSession("1", "session1", "portal1", "2023-01-01", "active");
         RedisResponse mockResponse = new RedisResponse(false, "An internal server error occurred");
 
         Mockito.doThrow(new RuntimeException("Redis exception")).when(redisService).save(eq("1"), any(UserSession.class));
