@@ -4,6 +4,11 @@ import com.redis.redisinterface.bean.RedisResponse;
 import com.redis.redisinterface.bean.UserSession;
 import com.redis.redisinterface.redisexception.RedisOperationException;
 import com.redis.redisinterface.service.RedisService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,14 +22,23 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/redis/api")
 @RequiredArgsConstructor
+@Tag(name = "Redis User Session API", description = "API endpoints for managing user sessions in Redis")
+
 public class RedisRestController {
 
     private static final String INTERNAL_SERVER_ERROR = "An internal server error occurred";
     private final RedisService<UserSession> redisService;
 
-
+    @Operation(summary = "Delete a user session by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User session successfully deleted"),
+            @ApiResponse(responseCode = "404", description = "User session not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<RedisResponse> deleteUserSession(@PathVariable String id) {
+    public ResponseEntity<RedisResponse> deleteUserSession(
+            @Parameter(description = "ID of the user session to delete")
+            @PathVariable String id) {
         log.debug("Attempting to delete user session with ID: {}", id);
         try {
             UserSession existingSession = redisService.findById(id);
@@ -41,8 +55,17 @@ public class RedisRestController {
         }
     }
 
+    @Operation(summary = "Update an existing user session")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User session successfully updated"),
+            @ApiResponse(responseCode = "404", description = "User session not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @PutMapping("/update")
-    public ResponseEntity<RedisResponse> updateUserSession(@RequestBody @Validated UserSession userSession) {
+    public ResponseEntity<RedisResponse> updateUserSession(
+            @Parameter(description = "Updated user session details")
+            @RequestBody @Validated UserSession userSession) {
+
         log.debug("Attempting to update user session: {}", userSession);
         try {
             UserSession updatedSession = redisService.update(userSession.getId(), userSession);
@@ -63,10 +86,18 @@ public class RedisRestController {
         }
     }
 
+    @Operation(summary = "Get all user sessions with pagination")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved user sessions"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping("/all")
     public ResponseEntity<RedisResponse> getAllUserSessions(
+            @Parameter(description = "Page number (0-based)")
             @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Number of items per page")
             @RequestParam(defaultValue = "10") int size) {
+
         log.debug("Attempting to retrieve all user sessions, page: {}, size: {}", page, size);
         try {
             List<UserSession> sessions = redisService.findAll(page, size);
@@ -83,8 +114,16 @@ public class RedisRestController {
     }
 
 
+    @Operation(summary = "Create a new user session")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User session successfully created"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @PostMapping("/save")
-    public ResponseEntity<RedisResponse> create(@RequestBody(required = true) @Validated UserSession userSession) {
+    public ResponseEntity<RedisResponse> create(
+            @Parameter(description = "User session to create")
+            @RequestBody(required = true) @Validated UserSession userSession) {
+
 
         log.debug("Attempting to save user session: {}", userSession);
 
@@ -113,9 +152,17 @@ public class RedisRestController {
     }
 
 
+    @Operation(summary = "Get a user session by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the user session"),
+            @ApiResponse(responseCode = "404", description = "User session not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping("/get/{id}")
-    public ResponseEntity<RedisResponse> getUserSession
-            (@PathVariable String id) {
+    public ResponseEntity<RedisResponse> getUserSession(
+            @Parameter(description = "ID of the user session to retrieve")
+            @PathVariable String id) {
+
         log.debug("Attempting to retrieve user session with ID: {}", id);
         try {
             UserSession userSession = redisService.findById(id);

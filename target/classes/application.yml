@@ -6,3 +6,9 @@ spring:
       host: redis-19039.c251.east-us-mz.azure.redns.redis-cloud.com
       port: 19039
       password: yhZ10YV96XmwQgPFELwi6iUHCfRxkWy1
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  api-docs:
+    path: /v3/api-docs
