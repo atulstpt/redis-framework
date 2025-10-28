@@ -122,10 +122,17 @@ public class RedisRestController {
     @PostMapping("/save")
     public ResponseEntity<RedisResponse> create(
             @Parameter(description = "User session to create")
-            @RequestBody(required = true) @Validated UserSession userSession) {
+            @RequestBody(required = false) @Validated UserSession userSession) {
 
 
         log.debug("Attempting to save user session: {}", userSession);
+
+        // Explicitly handle null body deserialization (e.g. request body = "null")
+        if (userSession == null) {
+            log.warn("Received null UserSession in request body");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new RedisResponse(false, "User session cannot be null"));
+        }
 
         try {
             redisService.save(userSession.getId(), userSession);
@@ -182,6 +189,3 @@ public class RedisRestController {
     }
 
 }
-
-
-
