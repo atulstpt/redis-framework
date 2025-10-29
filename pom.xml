@@ -31,8 +31,6 @@
     </scm>
     <properties>
         <java.version>21</java.version>
-        <!-- SonarQube/Cloud project key (must be non-empty and contain no whitespaces) -->
-        <sonar.projectKey>com.redis:redisinterface</sonar.projectKey>
     </properties>
     <dependencies>
         <dependency>
