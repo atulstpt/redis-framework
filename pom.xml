@@ -12,10 +12,10 @@
         <!-- lookup parent from repository -->
     </parent>
     <groupId>com.redis</groupId>
-    <artifactId>redisinterface</artifactId>
+    <artifactId>redis-framework</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>redisinterface</name>
-    <description>Demo project for Redis Interface</description>
+    <name>redis-framework</name>
+    <description>Demo project for Redis Framework</description>
     <url/>
     <licenses>
         <license/>
