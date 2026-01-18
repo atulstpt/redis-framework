@@ -3,9 +3,9 @@ spring:
     name: redisinterface
   data:
     redis:
-      host: redis-19039.c251.east-us-mz.azure.redns.redis-cloud.com
-      port: 19039
-      password: yhZ10YV96XmwQgPFELwi6iUHCfRxkWy1
+      host: redis-10157.c282.east-us-mz.azure.cloud.redislabs.com
+      port: 10157
+      password: KDA29okWCuQJhypSLt13WUKlLCuvt1Jm
 springdoc:
   swagger-ui:
     path: /swagger-ui.html

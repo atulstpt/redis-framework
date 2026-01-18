@@ -31,6 +31,12 @@
     </scm>
     <properties>
         <java.version>21</java.version>
+        <!-- Explicit version properties for selected dependencies/plugins -->
+        <lombok.version>1.18.42</lombok.version>
+        <mockito.version>5.17.0</mockito.version>
+        <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
+        <maven.surefire.plugin.version>3.1.2</maven.surefire.plugin.version>
+        <!-- Keep JaCoCo as-is (0.8.10) unless an upgrade is required -->
     </properties>
     <dependencies>
         <dependency>
@@ -49,6 +55,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -56,18 +63,21 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>3.0.1</version>
         </dependency>
+        <!-- Test helpers: include Spring Boot's test auto-configuration (test scope) -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Override transitive commons-lang3 from older versions to fix CVE-2025-48924 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.19.0</version>
         </dependency>
     </dependencies>
     <build>
@@ -75,11 +85,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
                 <configuration>
+                    <!-- Use modern release flag for Java 21 compatibility -->
+                    <release>${java.version}</release>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
@@ -101,7 +115,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.4</version>
+                <version>${maven.surefire.plugin.version}</version>
                 <configuration>
                     <trimStackTrace>false</trimStackTrace>
                     <printSummary>true</printSummary>
