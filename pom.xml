@@ -35,7 +35,7 @@
         <lombok.version>1.18.42</lombok.version>
         <mockito.version>5.17.0</mockito.version>
         <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
-        <maven.surefire.plugin.version>3.1.2</maven.surefire.plugin.version>
+        <maven.surefire.plugin.version>3.5.4</maven.surefire.plugin.version>
         <!-- Keep JaCoCo as-is (0.8.10) unless an upgrade is required -->
     </properties>
     <dependencies>
